@@ -75,6 +75,7 @@ namespace LudumDare40.Vrax
             PlayerEntity = Factory.CreateStartingPlayer();
             PlayerEntity.Position = new Point(50, Screen.Half.Height);
             PlayerEntity.Damaged += OnPlayerDamaged;
+            PlayerEntity.Destroyed += OnPlayerDestroyed;
 
             CreateUI();
 
@@ -90,6 +91,25 @@ namespace LudumDare40.Vrax
             Input.Register(Controls.Right, Keycode.D, Keycode.Right);
             Input.Register(Controls.Fire, MouseButton.Left, MouseButtonState.Pressed);
             Input.Register(Controls.Fire, Keycode.Space);
+        }
+
+        private void OnPlayerDestroyed(Entity obj)
+        {
+            var gameOverText = new Textfield(DefaultFont, "GAME OVER")
+            {
+                Parent = Display,
+                //Scale = new Distance(2f, 2f),
+                Position = Screen.Half,
+                Anchor = Distance.Center,
+                Color = Color.Alpha(0)
+            };
+            Animator.AddSequence(new[]
+            {
+                gameOverText.ColorTo(Color.White, 800),
+                new DelayTween(2500),
+                new ActionTween(() => gameOverText.Parent = null)
+            });
+
         }
 
         private void OnPlayerDamaged(Entity obj)

@@ -34,7 +34,17 @@ namespace LudumDare40.Vrax
                     Count = 2,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateBoxEnemy)
+                        new SpawnChance(3, factory.CreateBoxEnemy),
+                        new SpawnChance(1, factory.CreateRocketLauncherEnemy)
+                    })
+                },
+                new Wave()
+                {
+                    Count = 3,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateBoxEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy)
                     })
                 },
                 new Wave()
@@ -42,7 +52,18 @@ namespace LudumDare40.Vrax
                     Count = 4,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateBoxEnemy)
+                        new SpawnChance(2, factory.CreateBoxEnemy),
+                        new SpawnChance(1, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                    })
+                },
+                new Wave()
+                {
+                    Count = 5,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(1, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(4, factory.CreateUFOEnemy),
                     })
                 }
             };
@@ -61,6 +82,7 @@ namespace LudumDare40.Vrax
                 // Spawn
                 var spawn = currentWave.Table.Select(Rand.Next()).SpawnMethod.Invoke();
                 spawn.Position = new Point(Vrax.Game.Screen.Width, (float)(Vrax.Game.Screen.Half.Height * Rand.NextDouble()));
+                spawn.Disposed += OnEntityDisposed;
                 spawn.Destroyed += OnEntityDestroyed;
 
                 Spawned.Add(spawn);
@@ -68,10 +90,14 @@ namespace LudumDare40.Vrax
             }
         }
 
-        private void OnEntityDestroyed(Entity entity)
+        private void OnEntityDestroyed(Entity obj)
+        {
+            KillCount++;
+        }
+
+        private void OnEntityDisposed(Entity entity)
         {
             Spawned.Remove(entity);
-            KillCount++;
         }
 
         private class Wave

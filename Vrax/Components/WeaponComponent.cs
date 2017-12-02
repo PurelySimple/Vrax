@@ -11,6 +11,7 @@ namespace LudumDare40.Vrax.Components
         public WeaponConfig Config { get; set; }
         public Distance FireOffset { get; set; }
         public Distance ProjectileDirection { get; set; }
+        public bool PlayerTracking { get; set; }
 
         public bool TryFire { get; set; }
 
@@ -42,10 +43,20 @@ namespace LudumDare40.Vrax.Components
                 if (projectile == null)
                     throw new Exception("Projectile component not attached to projectile entity");
 
+                var collision = projectileEntity.GetComponent<CollisionDamageComponent>();
+                if (collision == null)
+                    throw new Exception("Collision Damage component not attached to projectile entity. How is it supposed to damage?");
+
+                collision.Damage = Config.Damage;
+
                 projectile.Direction = ProjectileDirection;
-                projectile.Damage = Config.Damage;
                 projectile.FiredFrom = Owner;
                 FireTimer = Config.ShootSpeed;
+
+                if (PlayerTracking)
+                {
+                    projectile.Direction = (Vrax.World.PlayerEntity.Position - Owner.Position).UnitVector;
+                }
 
                 Vrax.World.AddEntity(projectileEntity);
 

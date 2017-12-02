@@ -11,7 +11,6 @@ namespace LudumDare40.Vrax.Components
         public Entity FiredFrom { get; set; }
         public Distance Direction { get; set; } = new Distance(1, 0);
         public double Speed { get; set; }
-        public int Damage { get; set; }
 
         public void Start() { }
 
@@ -30,28 +29,6 @@ namespace LudumDare40.Vrax.Components
                 newPosition.Y < 0 || newPosition.Y > screen.Height)
             {
                 Owner.MarkedForDestruction = true;
-            }
-            else
-            {
-                // Check for entity collision (not efficient...)
-                var worldRect = Owner.WorldRect;
-                foreach (var other in Vrax.World.AllEntities())
-                {
-                    if (!other.IgnoreCollision && other.Team != Owner.Team && other != FiredFrom && worldRect.CollidesWith(other.WorldRect))
-                    {
-                        Owner.MarkedForDestruction = true;
-
-                        var damageHandler = other.GetComponent<IDamageHandler>();
-                        if (damageHandler == null)
-                        {
-                            other.ApplyDamage(Damage);
-                        }
-                        else
-                        {
-                            damageHandler.Damage(Damage, Owner);
-                        }
-                    }
-                }
             }
         }
     }

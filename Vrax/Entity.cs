@@ -9,6 +9,7 @@ namespace LudumDare40.Vrax
 {
     public class Entity : IDisposable
     {
+        public event Action<Entity> Disposed;
         public event Action<Entity> Destroyed;
         public event Action<Entity> Damaged;
         public event Action<Entity> Spawned;
@@ -82,12 +83,16 @@ namespace LudumDare40.Vrax
 
         public void Dispose()
         {
+            if (Health <= 0)
+                Destroyed?.Invoke(this);
+
             MarkedForDestruction = true;
-            Destroyed?.Invoke(this);
-            Destroyed = null;
+            Disposed?.Invoke(this);
+            Disposed = null;
 
             Damaged = null;
             Spawned = null;
+            Destroyed = null;
         }
     }
 

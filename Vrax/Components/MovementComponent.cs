@@ -45,6 +45,12 @@ namespace LudumDare40.Vrax.Components
             }
 
             Owner.Position = newPosition;
+
+            // Die if offscreen
+            if (Owner.Position.X < -50)
+            {
+                Owner.MarkedForDestruction = true;
+            }
         }
     }
 }

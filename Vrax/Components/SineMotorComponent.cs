@@ -32,11 +32,6 @@ namespace LudumDare40.Vrax.Components
 
             Movement.MoveUp = sine < 0;
             Movement.MoveDown = sine > 0;
-
-            if (Owner.Position.X < -50)
-            {
-                Owner.MarkedForDestruction = true;
-            }
         }
     }
 }

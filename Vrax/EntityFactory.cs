@@ -15,6 +15,7 @@ namespace LudumDare40.Vrax
 
         private AtlasFrame BoxEnemyAsset { get; set; }
         private AtlasFrame LaserAsset { get; set; }
+        private AtlasFrame EnemyShot { get; set; }
 
         private Sound LaserSound { get; set; }
         private List<Sound> ExplodeSounds { get; set; }
@@ -31,6 +32,7 @@ namespace LudumDare40.Vrax
 
             BoxEnemyAsset = MainAtlas.GetFrame("enemy.png");
             LaserAsset = MainAtlas.GetFrame("laser.png");
+            EnemyShot = MainAtlas.GetFrame("enemy_shot.png");
 
             LaserSound = assetCache.LoadSound("laserfire.wav");
 
@@ -81,11 +83,68 @@ namespace LudumDare40.Vrax
                 Rectangle = new Rect(0, 0, 12, 2),
                 IgnoreCollision = true
             };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
             result.AddComponent(new RenderComponent(LaserAsset));
             result.AddComponent(new ProjectileComponent()
             {
                 Speed = 500
             });
+
+            return result;
+        }
+
+        public Entity CreateEnemyShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 10, 5),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(EnemyShot));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 350
+            });
+
+            return result;
+        }
+
+        public Entity CreateOrbShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 8, 8),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("orb.png")));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 400
+            });
+
+            return result;
+        }
+
+        public Entity CreateRocketShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 16, 8),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("rocket.png")));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 50
+            });
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new AccelerationComponent(350, 1, Ease.Linear));
+            result.Destroyed += SpawnExplosionOnDeath;
 
             return result;
         }
@@ -122,12 +181,12 @@ namespace LudumDare40.Vrax
             var weapon = new WeaponConfig()
             {
                 Damage = 1,
-                ProjectileCreator = CreateLaser,
-                ShootSpeed = 0.8
+                ProjectileCreator = CreateEnemyShot,
+                ShootSpeed = 1
             };
 
             result.AddComponent(new RenderComponent(BoxEnemyAsset));
-            result.AddComponent(new MovementComponent(150));
+            result.AddComponent(new MovementComponent(100));
             result.AddComponent(new CollisionDamageComponent(1));
             result.AddComponent(new WeaponComponent(weapon)
             {
@@ -136,6 +195,76 @@ namespace LudumDare40.Vrax
                 TryFire = true
             });
             result.AddComponent(new SineMotorComponent(0.5f));
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
+        public Entity CreateRocketLauncherEnemy()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 38, 29),
+                Team = Team.Enemy
+            };
+
+            var weapon = new WeaponConfig()
+            {
+                Damage = 2,
+                ProjectileCreator = CreateRocketShot,
+                ShootSpeed = 1
+            };
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("rocketlauncher.png")));
+            result.AddComponent(new MovementComponent(75)
+            {
+                MoveLeft = true
+            });
+            result.AddComponent(new CollisionDamageComponent(1));
+            result.AddComponent(new WeaponComponent(weapon)
+            {
+                ProjectileDirection = new Distance(-1, 0),
+                FireOffset = new Distance(2, 0),
+                TryFire = true
+            });
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
+        public Entity CreateUFOEnemy()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 29, 16),
+                Team = Team.Enemy
+            };
+
+            var weapon = new WeaponConfig()
+            {
+                Damage = 1,
+                ProjectileCreator = CreateOrbShot,
+                ShootSpeed = 1.5
+            };
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("ufo.png")));
+            result.AddComponent(new MovementComponent(75)
+            {
+                MoveLeft = true
+            });
+            result.AddComponent(new CollisionDamageComponent(1));
+            result.AddComponent(new WeaponComponent(weapon)
+            {
+                ProjectileDirection = new Distance(-1, 0),
+                FireOffset = new Distance(2, 0),
+                TryFire = true,
+                PlayerTracking = true
+            });
+            result.AddComponent(new SineMotorComponent(1f));
 
             result.Destroyed += SpawnExplosionOnDeath;
 
