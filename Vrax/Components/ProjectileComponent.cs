@@ -25,7 +25,7 @@ namespace LudumDare40.Vrax.Components
 
             // Destroy Projectiles off screen
             var screen = Vrax.Game.Screen;
-            if (newPosition.X > screen.Width || newPosition.X < 0 ||
+            if (newPosition.X > screen.Width || Owner.WorldRect.Right < 0 ||
                 newPosition.Y < 0 || newPosition.Y > screen.Height)
             {
                 Owner.MarkedForDestruction = true;

@@ -53,6 +53,11 @@ namespace LudumDare40.Vrax
             return Components.OfType<T>().FirstOrDefault();
         }
 
+        public IEnumerable<T> GetComponents<T>()
+        {
+            return Components.OfType<T>();
+        }
+
         public void Update(double deltaTime)
         {
             if (!MarkedForDestruction && Health <= 0)

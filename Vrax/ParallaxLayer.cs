@@ -63,7 +63,7 @@ namespace LudumDare40.Vrax
                 renderObject.Position.X -= (float)(deltaTime * renderObject.Speed);
 
                 // is offscreen?
-                int width = renderObject.Asset.GetSize().Width;
+                int width = (int)(renderObject.Asset.GetSize().Width * renderObject.Scale.X);
                 if (renderObject.Position.X + width < 0)
                 {
                     // Rerandomize

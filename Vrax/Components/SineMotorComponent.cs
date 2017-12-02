@@ -23,6 +23,10 @@ namespace LudumDare40.Vrax.Components
             Movement = Owner.GetComponent<MovementComponent>();
 
             Movement.MoveLeft = true;
+
+            // Random starting direction
+            var rand = new Random();
+            Timer = rand.NextDouble() * 2 * Math.PI;
         }
 
         public void Update(double deltaTime)

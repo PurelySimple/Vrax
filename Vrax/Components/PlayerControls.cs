@@ -10,12 +10,12 @@ namespace LudumDare40.Vrax.Components
         public Entity Owner { get; set; }
 
         private MovementComponent Movement { get; set; }
-        private WeaponComponent Weapon { get; set; }
+        private IEnumerable<WeaponComponent> Weapons { get; set; }
 
         public void Start()
         {
             Movement = Owner.GetComponent<MovementComponent>();
-            Weapon = Owner.GetComponent<WeaponComponent>();
+            Weapons = Owner.GetComponents<WeaponComponent>();
         }
 
         public void Update(double deltaTime)
@@ -25,7 +25,11 @@ namespace LudumDare40.Vrax.Components
             Movement.MoveUp = Vrax.Game.Input.IsActionKeyDown(Controls.Up);
             Movement.MoveDown = Vrax.Game.Input.IsActionKeyDown(Controls.Down);
 
-            Weapon.TryFire = Vrax.Game.Input.IsActionKeyDown(Controls.Fire);
+            bool fire = Vrax.Game.Input.IsActionKeyDown(Controls.Fire);
+            foreach (var weapon in Weapons)
+            {
+                weapon.TryFire = fire;
+            }
 
             // Lock player to screen
             var screen = Vrax.Game.Screen;

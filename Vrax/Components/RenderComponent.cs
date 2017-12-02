@@ -10,6 +10,7 @@ namespace LudumDare40.Vrax.Components
     {
         public Entity Owner { get; set; }
         public Color Tint { get; set; } = Color.White;
+        public Distance Offset { get; set; } = Distance.Zero;
 
         private List<AtlasFrame> Frames { get; set; }
         private double Speed { get; set; }
@@ -30,7 +31,7 @@ namespace LudumDare40.Vrax.Components
 
         public void Render(Graphics g)
         {
-            g.Draw(Frames[FrameIndex], Owner.Position, Distance.Zero, 0, Distance.One, Tint);
+            g.Draw(Frames[FrameIndex], Owner.Position + Offset, Distance.Zero, 0, Distance.One, Tint);
         }
 
         public void Update(double deltaTime)

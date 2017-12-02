@@ -59,6 +59,16 @@ namespace LudumDare40.Vrax
             DefaultFont = AssetCache.LoadFont("DefaultFont.fnt");
             MainAtlas = AssetCache.LoadAtlas("Atlas.json");
 
+            // Setup slices
+            var beamTexture = MainAtlas.GetFrame("beam.png");
+            beamTexture.Slice = new SliceSettings()
+            {
+                Left = 2,
+                Right = 2
+            };
+
+            //Background.Add(new ParallaxLayer(MainAtlas.GetFrames("star{0}.png"), 100, (10, 20), (1f, 1f)));
+            Background.Add(new ParallaxLayer(MainAtlas.GetFrames("nebula{0}.png"), 50, (20, 45), (1f, 1f)));
             Background.Add(new ParallaxLayer(MainAtlas.GetFrames("star{0}.png"), 200, (100, 150), (1f, 1f)));
 
             // Load sounds
@@ -72,7 +82,7 @@ namespace LudumDare40.Vrax
             Factory = new EntityFactory(AssetCache);
             Spawner = new WaveSpawner(Factory);
 
-            PlayerEntity = Factory.CreateStartingPlayer();
+            PlayerEntity = Factory.CreateRank1Fighter();
             PlayerEntity.Position = new Point(50, Screen.Half.Height);
             PlayerEntity.Damaged += OnPlayerDamaged;
             PlayerEntity.Destroyed += OnPlayerDestroyed;
@@ -169,8 +179,8 @@ namespace LudumDare40.Vrax
                 }
                 else
                 {
-                    var renderable = entity.GetComponent<IRenderable>();
-                    if (renderable != null)
+                    var renderables = entity.GetComponents<IRenderable>();
+                    foreach (var renderable in renderables)
                     {
                         Renderables.Add(renderable);
                     }

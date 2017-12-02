@@ -13,7 +13,6 @@ namespace LudumDare40.Vrax
         private Atlas MainAtlas { get; set; }
         private Random Rand { get; set; }
 
-        private AtlasFrame BoxEnemyAsset { get; set; }
         private AtlasFrame LaserAsset { get; set; }
         private AtlasFrame EnemyShot { get; set; }
 
@@ -30,7 +29,6 @@ namespace LudumDare40.Vrax
                 MainAtlas = assetCache.LoadAtlas("Atlas.json");
             }
 
-            BoxEnemyAsset = MainAtlas.GetFrame("enemy.png");
             LaserAsset = MainAtlas.GetFrame("laser.png");
             EnemyShot = MainAtlas.GetFrame("enemy_shot.png");
 
@@ -48,15 +46,14 @@ namespace LudumDare40.Vrax
         {
             var result = new Entity()
             {
-                Health = 5,
-                Rectangle = new Rect(8, 4, 25, 9),
+                Health = 3,
+                Rectangle = new Rect(0, 2, 50, 14),
                 Team = Team.Player
             };
-            var shipFrames = MainAtlas.GetFrames("ship{0}.png");
-            result.AddComponent(new RenderComponent(shipFrames, 0.2d));
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("fighter0.png")));
             result.AddComponent(new MovementComponent(300d));
             result.AddComponent(new PlayerControls());
-            result.AddComponent(new InvulnerableDamageHandler(1d));
+            result.AddComponent(new InvulnerableDamageHandler(1.5d));
 
             // Starting weapon
             result.AddComponent(new WeaponComponent(new WeaponConfig()
@@ -67,6 +64,49 @@ namespace LudumDare40.Vrax
             })
             {
                 FireOffset = new Distance(32, 9),
+                ProjectileDirection = new Distance(1f, 0)
+            });
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
+        public Entity CreateRank1Fighter()
+        {
+            var result = new Entity()
+            {
+                Health = 3,
+                Rectangle = new Rect(0, 2, 52, 20),
+                Team = Team.Player
+            };
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("fighter1.png")));
+            result.AddComponent(GetBurnerAnim(new Distance(0, 9)));
+            result.AddComponent(new MovementComponent(250d));
+            result.AddComponent(new PlayerControls());
+            result.AddComponent(new InvulnerableDamageHandler(1.5d));
+
+            // Starting weapon
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateLaser,
+                ShootSpeed = 0.1,
+                Damage = 1,
+            })
+            {
+                FireOffset = new Distance(28, 9),
+                ProjectileDirection = new Distance(1f, 0)
+            });
+            // Wing weapon
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateLaser,
+                ShootSpeed = 0.3,
+                Damage = 1,
+            })
+            {
+                TryFire = true, // Autofire
+                FireOffset = new Distance(34, 21),
                 ProjectileDirection = new Distance(1f, 0)
             });
 
@@ -149,6 +189,25 @@ namespace LudumDare40.Vrax
             return result;
         }
 
+        public Entity CreateBeamShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 10, 9),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new RenderSliceComponent(MainAtlas.GetFrame("beam.png")));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 0,
+            });
+            result.AddComponent(new CollisionDamageComponent(0));
+            result.AddComponent(new GrowComponent(200, 0.8, 250));
+
+            return result;
+        }
+
         public Entity CreateExplosion()
         {
             var result = new Entity()
@@ -169,12 +228,12 @@ namespace LudumDare40.Vrax
             return result;
         }
 
-        public Entity CreateBoxEnemy()
+        public Entity CreateShuttleEnemy()
         {
             var result = new Entity()
             {
                 Health = 1,
-                Rectangle = new Rect(0, 0, 15, 16),
+                Rectangle = new Rect(0, 0, 35, 19),
                 Team = Team.Enemy
             };
 
@@ -182,11 +241,13 @@ namespace LudumDare40.Vrax
             {
                 Damage = 1,
                 ProjectileCreator = CreateEnemyShot,
-                ShootSpeed = 1
+                ShootSpeed = 3
             };
 
-            result.AddComponent(new RenderComponent(BoxEnemyAsset));
-            result.AddComponent(new MovementComponent(100));
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("shuttle.png")));
+            result.AddComponent(GetJetAnim(new Distance(36, 1)));
+            result.AddComponent(GetJetAnim(new Distance(36, 15)));
+            result.AddComponent(new MovementComponent(150));
             result.AddComponent(new CollisionDamageComponent(1));
             result.AddComponent(new WeaponComponent(weapon)
             {
@@ -194,7 +255,7 @@ namespace LudumDare40.Vrax
                 FireOffset = new Distance(0, 8),
                 TryFire = true
             });
-            result.AddComponent(new SineMotorComponent(0.5f));
+            result.AddComponent(new SineMotorComponent(0.8f));
 
             result.Destroyed += SpawnExplosionOnDeath;
 
@@ -227,6 +288,40 @@ namespace LudumDare40.Vrax
             {
                 ProjectileDirection = new Distance(-1, 0),
                 FireOffset = new Distance(2, 0),
+                TryFire = true
+            });
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
+        public Entity CreateBeamEnemy()
+        {
+            var result = new Entity()
+            {
+                Health = 10,
+                Rectangle = new Rect(0, 0, 49, 33),
+                Team = Team.Enemy
+            };
+
+            var weapon = new WeaponConfig()
+            {
+                Damage = 2,
+                ProjectileCreator = CreateBeamShot,
+                ShootSpeed = 4
+            };
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("beamship.png")));
+            result.AddComponent(new MovementComponent(40)
+            {
+                MoveLeft = true
+            });
+            result.AddComponent(new CollisionDamageComponent(1));
+            result.AddComponent(new WeaponComponent(weapon)
+            {
+                ProjectileDirection = new Distance(-1, 0),
+                FireOffset = new Distance(2, 12),
                 TryFire = true
             });
 
@@ -269,6 +364,22 @@ namespace LudumDare40.Vrax
             result.Destroyed += SpawnExplosionOnDeath;
 
             return result;
+        }
+
+        private RenderComponent GetBurnerAnim(Distance offset)
+        {
+            return new RenderComponent(MainAtlas.GetFrames("burner{0}.png"), 0.1)
+            {
+                Offset = offset + new Distance(-16, 0)
+            };
+        }
+
+        private RenderComponent GetJetAnim(Distance offset)
+        {
+            return new RenderComponent(MainAtlas.GetFrames("jet{0}.png"), 0.1)
+            {
+                Offset = offset
+            };
         }
 
         private void SpawnExplosionOnDeath(Entity entity)

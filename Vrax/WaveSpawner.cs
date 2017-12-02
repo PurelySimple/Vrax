@@ -26,7 +26,7 @@ namespace LudumDare40.Vrax
                     Count = 1,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateBoxEnemy)
+                        new SpawnChance(1, factory.CreateShuttleEnemy)
                     })
                 },
                 new Wave()
@@ -34,7 +34,7 @@ namespace LudumDare40.Vrax
                     Count = 2,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(3, factory.CreateBoxEnemy),
+                        new SpawnChance(3, factory.CreateShuttleEnemy),
                         new SpawnChance(1, factory.CreateRocketLauncherEnemy)
                     })
                 },
@@ -43,7 +43,7 @@ namespace LudumDare40.Vrax
                     Count = 3,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(2, factory.CreateBoxEnemy),
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
                         new SpawnChance(2, factory.CreateRocketLauncherEnemy)
                     })
                 },
@@ -52,7 +52,7 @@ namespace LudumDare40.Vrax
                     Count = 4,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(2, factory.CreateBoxEnemy),
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
                         new SpawnChance(1, factory.CreateRocketLauncherEnemy),
                         new SpawnChance(2, factory.CreateUFOEnemy),
                     })
@@ -64,6 +64,16 @@ namespace LudumDare40.Vrax
                     {
                         new SpawnChance(1, factory.CreateRocketLauncherEnemy),
                         new SpawnChance(4, factory.CreateUFOEnemy),
+                    })
+                },
+                new Wave()
+                {
+                    Count = 6,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
                     })
                 }
             };
@@ -81,7 +91,7 @@ namespace LudumDare40.Vrax
             {
                 // Spawn
                 var spawn = currentWave.Table.Select(Rand.Next()).SpawnMethod.Invoke();
-                spawn.Position = new Point(Vrax.Game.Screen.Width, (float)(Vrax.Game.Screen.Half.Height * Rand.NextDouble()));
+                spawn.Position = new Point(Vrax.Game.Screen.Width, (float)(Vrax.Game.Screen.Height * 0.8f * Rand.NextDouble()));
                 spawn.Disposed += OnEntityDisposed;
                 spawn.Destroyed += OnEntityDestroyed;
 
