@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudumDare40", "LudumDare40\LudumDare40.csproj", "{81BE5F87-B86A-4E5D-AEF9-DB1BC99C5046}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vrax", "Vrax\Vrax.csproj", "{81BE5F87-B86A-4E5D-AEF9-DB1BC99C5046}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
