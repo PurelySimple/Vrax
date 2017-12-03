@@ -1,4 +1,5 @@
 ﻿using LudumDare40.Vrax.Components;
+using LudumDare40.Vrax.States;
 using PSEngine;
 using PSEngine.Core;
 using System;
@@ -6,24 +7,15 @@ using System.Collections.Generic;
 
 namespace LudumDare40.Vrax
 {
-    class Vrax : Game, IWorldContainer
+    class Vrax : Game
     {
         public Font DefaultFont { get; private set; }
         public Atlas MainAtlas { get; private set; }
 
         private EntityFactory Factory { get; set; }
-        private WaveSpawner Spawner { get; set; }
+        private IGameState State { get; set; }
 
-        private List<Entity> Entities { get; set; } = new List<Entity>();
         private List<ParallaxLayer> Background { get; set; } = new List<ParallaxLayer>();
-
-        private List<IRenderable> Renderables { get; set; } = new List<IRenderable>();
-        private List<Entity> ToDestroy { get; set; } = new List<Entity>();
-
-        private Distance HealthOffset { get; set; }
-        private AtlasFrame HealthFrame { get; set; }
-
-        public Entity PlayerEntity { get; private set; }
 
         public static IGameAccess Game { get; private set; }
         public static IWorldContainer World { get; private set; }
@@ -32,7 +24,6 @@ namespace LudumDare40.Vrax
         {
             var game = new Vrax();
             Game = game;
-            World = game;
             game.Run();
         }
 
@@ -58,6 +49,7 @@ namespace LudumDare40.Vrax
         {
             DefaultFont = AssetCache.LoadFont("DefaultFont.fnt");
             MainAtlas = AssetCache.LoadAtlas("Atlas.json");
+            AssetCache.LoadTexture("Title.png");
 
             Audio.PlayMusic(AssetCache.LoadMusic("song.mp3"));
 
@@ -69,7 +61,20 @@ namespace LudumDare40.Vrax
                 Right = 2
             };
 
-            //Background.Add(new ParallaxLayer(MainAtlas.GetFrames("star{0}.png"), 100, (10, 20), (1f, 1f)));
+            var meterHolder = MainAtlas.GetFrame("meterholder.png");
+            meterHolder.Slice = new SliceSettings()
+            {
+                Left = 8,
+                Right = 8
+            };
+
+            var meter = MainAtlas.GetFrame("meter.png");
+            meter.Slice = new SliceSettings()
+            {
+                Left = 2,
+                Right = 2
+            };
+
             Background.Add(new ParallaxLayer(MainAtlas.GetFrames("nebula{0}.png"), 50, (20, 45), (1f, 1f)));
             Background.Add(new ParallaxLayer(MainAtlas.GetFrames("star{0}.png"), 200, (100, 150), (1f, 1f)));
 
@@ -80,81 +85,49 @@ namespace LudumDare40.Vrax
             AssetCache.LoadSound("explosion0.wav");
             AssetCache.LoadSound("explosion1.wav");
             AssetCache.LoadSound("explosion2.wav");
+            AssetCache.LoadSound("transform.wav");
+            AssetCache.LoadSound("shieldup.wav");
+            AssetCache.LoadSound("shielddown.wav");
 
             Factory = new EntityFactory(AssetCache);
-            Spawner = new WaveSpawner(Factory);
 
-            PlayerEntity = Factory.CreateRank1Fighter();
-            PlayerEntity.Position = new Point(50, Screen.Half.Height);
-            PlayerEntity.Damaged += OnPlayerDamaged;
-            PlayerEntity.Destroyed += OnPlayerDestroyed;
-
-            CreateUI();
-
-            AddEntity(PlayerEntity);
-
-            //var tempEnemy = Factory.CreateBoxEnemy();
-            //tempEnemy.Position = new Point(Screen.Width - 50, Screen.Half.Height);
-            //AddEntity(tempEnemy);
-
+            Input.Register(Controls.Cancel, Keycode.Escape);
             Input.Register(Controls.Up, Keycode.W, Keycode.Up);
             Input.Register(Controls.Left, Keycode.A, Keycode.Left);
             Input.Register(Controls.Down, Keycode.S, Keycode.Down);
             Input.Register(Controls.Right, Keycode.D, Keycode.Right);
             Input.Register(Controls.Fire, MouseButton.Left, MouseButtonState.Pressed);
             Input.Register(Controls.Fire, Keycode.Space);
+
+            Input.Register(Controls.TransformSmaller, Keycode.Q);
+            Input.Register(Controls.TransformSmaller, MouseButton.X1, MouseButtonState.Released);
+            Input.Register(Controls.TransformBigger, Keycode.E);
+            Input.Register(Controls.TransformBigger, MouseButton.X2, MouseButtonState.Released);
+
+            var action = Input.Register(Controls.DisableMusic, Keycode.M);
+            action.OnReleased += OnDisableMusic;
+
+            State = new MenuState(Factory);
         }
 
-        private void OnPlayerDestroyed(Entity obj)
+        private void OnDisableMusic()
         {
-            var gameOverText = new Textfield(DefaultFont, "GAME OVER")
-            {
-                Parent = Display,
-                //Scale = new Distance(2f, 2f),
-                Position = Screen.Half,
-                Anchor = Distance.Center,
-                Color = Color.Alpha(0)
-            };
-            Animator.AddSequence(new[]
-            {
-                gameOverText.ColorTo(Color.White, 800),
-                new DelayTween(2500),
-                new ActionTween(() => gameOverText.Parent = null)
-            });
-
-        }
-
-        private void OnPlayerDamaged(Entity obj)
-        {
-            Spawner.KillCount /= 2;
-        }
-
-        private void CreateUI()
-        {
-            var title = new Textfield(DefaultFont, "Vrax Ludum Dare 40 Game!")
-            {
-                Parent = Display,
-                Position = new Point(Screen.Half.Width, -50),
-                //Position = new Point(Screen.Half.Width, Screen.Half.Height * 0.3f),
-                Anchor = Distance.Center
-            };
-            Animator.AddSequence(new[]
-            {
-                title.MoveTo(new Point(Screen.Half.Width, Screen.Half.Height * 0.3f), 800, Ease.BounceOut),
-                new DelayTween(1000),
-                title.MoveRelative(new Distance(-Screen.Width, 0), 1500, Ease.CubicOut),
-                new ActionTween(() => title.Parent = null)
-            });
-
-            HealthFrame = MainAtlas.GetFrame("health.png");
-            HealthOffset = new Distance(DefaultFont.GetTextWidth("Health:") + 12, 9);
+            Audio.StopMusic();
         }
 
         protected override void Update(double deltaTime)
         {
             UpdateBackground(deltaTime);
-            UpdateEntities(deltaTime);
-            Spawner.Update(deltaTime);
+            State?.Update(deltaTime);
+
+            if (State?.NextState != null)
+            {
+                var newState = State.NextState;
+                State.Dispose();
+                State = newState;
+
+                World = newState as IWorldContainer;
+            }
         }
 
         private void UpdateBackground(double deltaTime)
@@ -165,37 +138,6 @@ namespace LudumDare40.Vrax
             }
         }
 
-        private void UpdateEntities(double deltaTime)
-        {
-            Renderables.Clear();
-            ToDestroy.Clear();
-
-            for (int i = Entities.Count - 1; i >= 0; i--)
-            {
-                var entity = Entities[i];
-                entity.Update(deltaTime);
-
-                if (entity.MarkedForDestruction)
-                {
-                    ToDestroy.Add(entity);
-                }
-                else
-                {
-                    var renderables = entity.GetComponents<IRenderable>();
-                    foreach (var renderable in renderables)
-                    {
-                        Renderables.Add(renderable);
-                    }
-                }
-            }
-
-            foreach (var destroyedEntity in ToDestroy)
-            {
-                Entities.Remove(destroyedEntity);
-                destroyedEntity.Dispose();
-            }
-        }
-
         protected override void Draw(Graphics g, float framePercent)
         {
             foreach (var bg in Background)
@@ -203,47 +145,23 @@ namespace LudumDare40.Vrax
                 bg.Render(g);
             }
 
-            foreach (var renderable in Renderables)
-            {
-                renderable.Render(g);
-            }
+            State?.Draw(g);
 
-            DrawUI(g);
-
-
-            // DEBUG RENDER
+            // DEBUG
             g.DrawText(DefaultFont, $"FPS: {FPS}", new Point(0, Screen.Height - DefaultFont.TextHeight));
-            g.DrawText(DefaultFont, $"E: {Entities.Count}", new Point(Screen.Width, 0), TextAlign.Right);
-            g.DrawText(DefaultFont, $"K: {Spawner.KillCount}", new Point(Screen.Width, 20), TextAlign.Right);
-        }
-
-        private void DrawUI(Graphics g)
-        {
-            g.DrawText(DefaultFont, "Health:", Point.Zero);
-            for (int i = 0; i < PlayerEntity.Health; i++)
-            {
-                g.Draw(MainAtlas.GetFrame("health.png"), (int)HealthOffset.X + (i * (HealthFrame.Width + 12)), (int)HealthOffset.Y);
-            }
-        }
-
-        public void AddEntity(Entity entity)
-        {
-            Entities.Add(entity);
-            entity.Start();
-        }
-
-        public IReadOnlyList<Entity> AllEntities()
-        {
-            return Entities;
         }
     }
 
     public enum Controls
     {
+        Cancel,
         Up,
         Down,
         Left,
         Right,
-        Fire
+        Fire,
+        DisableMusic,
+        TransformSmaller,
+        TransformBigger
     }
 }

@@ -6,11 +6,14 @@ using System.Text;
 
 namespace LudumDare40.Vrax.Components
 {
-    public class RenderComponent : IComponent, IRenderable
+    public class RenderComponent : IComponent, IRenderable, IDisposable
     {
         public Entity Owner { get; set; }
         public Color Tint { get; set; } = Color.White;
         public Distance Offset { get; set; } = Distance.Zero;
+        public float Rotation { get; set; }
+
+        public Func<bool> Condition { get; set; }
 
         private List<AtlasFrame> Frames { get; set; }
         private double Speed { get; set; }
@@ -31,7 +34,8 @@ namespace LudumDare40.Vrax.Components
 
         public void Render(Graphics g)
         {
-            g.Draw(Frames[FrameIndex], Owner.Position + Offset, Distance.Zero, 0, Distance.One, Tint);
+            if (Condition == null || Condition.Invoke())
+                g.Draw(Frames[FrameIndex], Owner.Position + Offset, Distance.Zero, Rotation, Distance.One, Tint);
         }
 
         public void Update(double deltaTime)
@@ -50,6 +54,11 @@ namespace LudumDare40.Vrax.Components
 
         public void Start()
         {
+        }
+
+        public void Dispose()
+        {
+            Condition = null;
         }
     }
 }

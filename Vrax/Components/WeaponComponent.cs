@@ -15,7 +15,7 @@ namespace LudumDare40.Vrax.Components
 
         public bool TryFire { get; set; }
 
-        private double FireTimer { get; set; }
+        public double FireTimer { get; private set; }
 
         public WeaponComponent(WeaponConfig config)
         {

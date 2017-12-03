@@ -88,13 +88,22 @@ namespace LudumDare40.Vrax
 
         public void Dispose()
         {
+            foreach (var component in Components)
+            {
+                if (component is IDisposable comp)
+                {
+                    comp.Dispose();
+                }
+            }
+            Components.Clear();
+
             if (Health <= 0)
                 Destroyed?.Invoke(this);
 
             MarkedForDestruction = true;
             Disposed?.Invoke(this);
-            Disposed = null;
 
+            Disposed = null;
             Damaged = null;
             Spawned = null;
             Destroyed = null;

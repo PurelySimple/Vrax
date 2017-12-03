@@ -9,7 +9,7 @@ namespace LudumDare40.Vrax.Components
     {
         public Entity Owner { get; set; }
 
-        private RenderComponent Renderer { get; set; }
+        private IEnumerable<RenderComponent> Renderers { get; set; }
 
         private double Duration { get; set; }
         private double CooldownTimer { get; set; }
@@ -37,7 +37,7 @@ namespace LudumDare40.Vrax.Components
 
         public void Start()
         {
-            Renderer = Owner.GetComponent<RenderComponent>();
+            Renderers = Owner.GetComponents<RenderComponent>();
 
             Rand = new Random();
             HitSounds = new List<Sound>()
@@ -56,11 +56,14 @@ namespace LudumDare40.Vrax.Components
                 if (CooldownTimer < 0)
                 {
                     CooldownTimer = 0;
-                    Renderer.Tint = Color.White;
+
+                    foreach (var renderer in Renderers)
+                        renderer.Tint = Color.White;
                 }
                 else
                 {
-                    Renderer.Tint = Color.Alpha(0.60f); // Ghost the image
+                    foreach (var renderer in Renderers)
+                        renderer.Tint = Color.Alpha(0.40f); // Ghost the image
                 }
             }
         }

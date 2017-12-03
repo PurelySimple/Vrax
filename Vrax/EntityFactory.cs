@@ -14,6 +14,7 @@ namespace LudumDare40.Vrax
         private Random Rand { get; set; }
 
         private AtlasFrame LaserAsset { get; set; }
+        private AtlasFrame LaserVerticalAsset { get; set; }
         private AtlasFrame EnemyShot { get; set; }
 
         private Sound LaserSound { get; set; }
@@ -30,6 +31,7 @@ namespace LudumDare40.Vrax
             }
 
             LaserAsset = MainAtlas.GetFrame("laser.png");
+            LaserVerticalAsset = MainAtlas.GetFrame("laservertical.png");
             EnemyShot = MainAtlas.GetFrame("enemy_shot.png");
 
             LaserSound = assetCache.LoadSound("laserfire.wav");
@@ -82,7 +84,7 @@ namespace LudumDare40.Vrax
             };
             result.AddComponent(new RenderComponent(MainAtlas.GetFrame("fighter1.png")));
             result.AddComponent(GetBurnerAnim(new Distance(0, 9)));
-            result.AddComponent(new MovementComponent(250d));
+            result.AddComponent(new MovementComponent(200d));
             result.AddComponent(new PlayerControls());
             result.AddComponent(new InvulnerableDamageHandler(1.5d));
 
@@ -90,7 +92,7 @@ namespace LudumDare40.Vrax
             result.AddComponent(new WeaponComponent(new WeaponConfig()
             {
                 ProjectileCreator = CreateLaser,
-                ShootSpeed = 0.1,
+                ShootSpeed = 0.3,
                 Damage = 1,
             })
             {
@@ -115,6 +117,85 @@ namespace LudumDare40.Vrax
             return result;
         }
 
+        public Entity CreateBomber()
+        {
+            var result = new Entity()
+            {
+                Health = 4,
+                Rectangle = new Rect(2, 2, 98, 29),
+                Team = Team.Player
+            };
+            result.AddComponent(new MovementComponent(100d));
+            result.AddComponent(new PlayerControls());
+            result.AddComponent(new InvulnerableDamageHandler(2d));
+
+            // upper weapon
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateLaser,
+                ShootSpeed = 0.2,
+                Damage = 1,
+            })
+            {
+                FireOffset = new Distance(88, 1),
+                ProjectileDirection = new Distance(1f, 0)
+            });
+            // lower weapon
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateLaserVertical,
+                ShootSpeed = 0.3,
+                Damage = 1,
+            })
+            {
+                FireOffset = new Distance(80, 32),
+                ProjectileDirection = new Distance(0, 1f)
+            });
+
+            // Bomb
+            var bombWeapon = new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateBomb,
+                ShootSpeed = 1,
+                Damage = 20,
+            })
+            {
+                FireOffset = new Distance(37, 22),
+                ProjectileDirection = new Distance(1f, 0)
+            };
+            result.AddComponent(bombWeapon);
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("bomb.png"))
+            {
+                Offset = new Distance(37, 22),
+                Condition = () => bombWeapon.FireTimer == 0
+            });
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("bomber.png")));
+            result.AddComponent(GetBurnerAnim(new Distance(0, 9)));
+            result.AddComponent(GetBurnerAnim(new Distance(0, 21)));
+
+            result.AddComponent(new ShieldComponent(CreateBomberShield())
+            {
+                Cooldown = 1f,
+            });
+
+            result.Destroyed += SpawnMediumExplosionOnDeath;
+
+            return result;
+        }
+
+        private Entity CreateBomberShield()
+        {
+            var result = new Entity()
+            {
+                Health = 30,
+                Rectangle = new Rect(0, 0, 123, 43),
+            };
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("bombershield.png")));
+
+            return result;
+        }
+
         public Entity CreateLaser()
         {
             var result = new Entity()
@@ -129,6 +210,46 @@ namespace LudumDare40.Vrax
             {
                 Speed = 500
             });
+
+            return result;
+        }
+
+        public Entity CreateLaserVertical()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 2, 10),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(LaserVerticalAsset));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 500
+            });
+
+            return result;
+        }
+
+        public Entity CreateBomb()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 43, 9),
+                IgnoreCollision = true
+            };
+            result.AddComponent(GetBurnerAnim(new Distance(0, 2)));
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("bomb.png")));
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 20
+            });
+            result.AddComponent(new AccelerationComponent(450, 1, Ease.Linear));
+
+            result.Destroyed += SpawnMediumExplosionOnDeath;
 
             return result;
         }
@@ -178,6 +299,7 @@ namespace LudumDare40.Vrax
                 IgnoreCollision = true
             };
             result.AddComponent(new RenderComponent(MainAtlas.GetFrame("rocket.png")));
+            result.AddComponent(GetJetAnim(new Distance(14, 2)));
             result.AddComponent(new ProjectileComponent()
             {
                 Speed = 50
@@ -208,7 +330,7 @@ namespace LudumDare40.Vrax
             return result;
         }
 
-        public Entity CreateExplosion()
+        private Entity CreateExplosion()
         {
             var result = new Entity()
             {
@@ -220,10 +342,20 @@ namespace LudumDare40.Vrax
             result.AddComponent(new RenderComponent(MainAtlas.GetFrames("splosion_{0}.png"), 0.1f));
             result.AddComponent(new LifespanComponent(0.49f));
 
-            result.Spawned += e =>
+            return result;
+        }
+
+        private Entity CreateLargeExplosion()
+        {
+            var result = new Entity()
             {
-                Vrax.Game.Audio.PlaySound(ExplodeSounds[Rand.Next() % ExplodeSounds.Count]);
+                Health = 1,
+                Rectangle = new Rect(0, 0, 1, 1),
+                IgnoreCollision = true
             };
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrames("explosionlarge_{0}.png"), 0.1f));
+            result.AddComponent(new LifespanComponent(0.57f));
 
             return result;
         }
@@ -266,8 +398,8 @@ namespace LudumDare40.Vrax
         {
             var result = new Entity()
             {
-                Health = 1,
-                Rectangle = new Rect(0, 0, 38, 29),
+                Health = 3,
+                Rectangle = new Rect(0, 0, 37, 26),
                 Team = Team.Enemy
             };
 
@@ -279,6 +411,7 @@ namespace LudumDare40.Vrax
             };
 
             result.AddComponent(new RenderComponent(MainAtlas.GetFrame("rocketlauncher.png")));
+            result.AddComponent(GetJetLongAnim(new Distance(35, 16)));
             result.AddComponent(new MovementComponent(75)
             {
                 MoveLeft = true
@@ -287,11 +420,11 @@ namespace LudumDare40.Vrax
             result.AddComponent(new WeaponComponent(weapon)
             {
                 ProjectileDirection = new Distance(-1, 0),
-                FireOffset = new Distance(2, 0),
+                FireOffset = new Distance(-5, 2),
                 TryFire = true
             });
 
-            result.Destroyed += SpawnExplosionOnDeath;
+            result.Destroyed += SpawnMediumExplosionOnDeath;
 
             return result;
         }
@@ -335,7 +468,7 @@ namespace LudumDare40.Vrax
             var result = new Entity()
             {
                 Health = 1,
-                Rectangle = new Rect(0, 0, 29, 16),
+                Rectangle = new Rect(0, 0, 18, 20),
                 Team = Team.Enemy
             };
 
@@ -355,11 +488,14 @@ namespace LudumDare40.Vrax
             result.AddComponent(new WeaponComponent(weapon)
             {
                 ProjectileDirection = new Distance(-1, 0),
-                FireOffset = new Distance(2, 0),
+                FireOffset = new Distance(6, 9),
                 TryFire = true,
                 PlayerTracking = true
             });
             result.AddComponent(new SineMotorComponent(1f));
+
+            result.AddComponent(GetJetAnim(new Distance(6, 0), 90));
+            result.AddComponent(GetJetAnim(new Distance(11, 20), 270));
 
             result.Destroyed += SpawnExplosionOnDeath;
 
@@ -374,9 +510,18 @@ namespace LudumDare40.Vrax
             };
         }
 
-        private RenderComponent GetJetAnim(Distance offset)
+        private RenderComponent GetJetAnim(Distance offset, float rotation = 0)
         {
             return new RenderComponent(MainAtlas.GetFrames("jet{0}.png"), 0.1)
+            {
+                Offset = offset,
+                Rotation = rotation
+            };
+        }
+
+        private RenderComponent GetJetLongAnim(Distance offset)
+        {
+            return new RenderComponent(MainAtlas.GetFrames("jetlong{0}.png"), 0.1)
             {
                 Offset = offset
             };
@@ -385,7 +530,17 @@ namespace LudumDare40.Vrax
         private void SpawnExplosionOnDeath(Entity entity)
         {
             var explosion = CreateExplosion();
+            explosion.Spawned += e => Vrax.Game.Audio.PlaySound(ExplodeSounds[Rand.Next() % ExplodeSounds.Count]);
             explosion.Position = entity.Position + new Distance((entity.Rectangle.Right / 2) - 12, (entity.Rectangle.Bottom / 2) - 12);
+            Vrax.World.AddEntity(explosion);
+        }
+
+        private void SpawnMediumExplosionOnDeath(Entity entity)
+        {
+            var explosion = CreateLargeExplosion();
+            explosion.Spawned += e => Vrax.Game.Audio.PlaySound(ExplodeSounds[Rand.Next() % ExplodeSounds.Count]);
+            var jitter = new Distance(Rand.Next(20) - 10, Rand.Next(20) - 10);
+            explosion.Position = entity.Position + jitter;
             Vrax.World.AddEntity(explosion);
         }
     }

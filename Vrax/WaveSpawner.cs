@@ -1,12 +1,15 @@
 ﻿using PSEngine.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LudumDare40.Vrax
 {
-    public class WaveSpawner
+    public class WaveSpawner : IDisposable
     {
+        public event Action<int> KillCountChanged;
+
         public int Level { get; set; }
         private List<Wave> Waves { get; set; }
 
@@ -14,6 +17,8 @@ namespace LudumDare40.Vrax
         private Random Rand { get; set; }
 
         public int KillCount { get; set; }
+
+        public float WaveProgress => (float)KillCount / Waves[Level].KillRequirement;
 
         public WaveSpawner(EntityFactory factory)
         {
@@ -23,15 +28,17 @@ namespace LudumDare40.Vrax
             {
                 new Wave()
                 {
-                    Count = 1,
+                    KillRequirement = 3,
+                    SpawnCount = 1,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateShuttleEnemy)
+                        new SpawnChance(1, factory.CreateUFOEnemy)
                     })
                 },
                 new Wave()
                 {
-                    Count = 2,
+                    KillRequirement = 5,
+                    SpawnCount = 2,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(3, factory.CreateShuttleEnemy),
@@ -40,7 +47,8 @@ namespace LudumDare40.Vrax
                 },
                 new Wave()
                 {
-                    Count = 3,
+                    KillRequirement = 15,
+                    SpawnCount = 3,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(2, factory.CreateShuttleEnemy),
@@ -49,7 +57,8 @@ namespace LudumDare40.Vrax
                 },
                 new Wave()
                 {
-                    Count = 4,
+                    KillRequirement = 40,
+                    SpawnCount = 4,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(2, factory.CreateShuttleEnemy),
@@ -59,7 +68,8 @@ namespace LudumDare40.Vrax
                 },
                 new Wave()
                 {
-                    Count = 5,
+                    KillRequirement = 50,
+                    SpawnCount = 5,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(1, factory.CreateRocketLauncherEnemy),
@@ -68,12 +78,25 @@ namespace LudumDare40.Vrax
                 },
                 new Wave()
                 {
-                    Count = 6,
+                    KillRequirement = 60,
+                    SpawnCount = 6,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(2, factory.CreateRocketLauncherEnemy),
                         new SpawnChance(2, factory.CreateUFOEnemy),
                         new SpawnChance(2, factory.CreateBeamEnemy),
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 70,
+                    SpawnCount = 10,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(1, factory.CreateBeamEnemy),
                     })
                 }
             };
@@ -81,17 +104,15 @@ namespace LudumDare40.Vrax
 
         public void Update(double deltaTime)
         {
-            Level = (KillCount / 10);
-            if (Level >= Waves.Count)
-                Level = Waves.Count - 1;
-
             var currentWave = Waves[Level];
 
-            while (Spawned.Count < currentWave.Count)
+            while (Spawned.Count < currentWave.SpawnCount)
             {
+                float spawnRange = Vrax.Game.Screen.Height * 0.8f;
+                float spawnYOffset = Vrax.Game.Screen.Height * 0.1f;
                 // Spawn
                 var spawn = currentWave.Table.Select(Rand.Next()).SpawnMethod.Invoke();
-                spawn.Position = new Point(Vrax.Game.Screen.Width, (float)(Vrax.Game.Screen.Height * 0.8f * Rand.NextDouble()));
+                spawn.Position = new Point(Vrax.Game.Screen.Width, (float)(spawnRange * Rand.NextDouble()) + spawnYOffset);
                 spawn.Disposed += OnEntityDisposed;
                 spawn.Destroyed += OnEntityDestroyed;
 
@@ -103,6 +124,12 @@ namespace LudumDare40.Vrax
         private void OnEntityDestroyed(Entity obj)
         {
             KillCount++;
+
+            Level = Waves.FindIndex(w => KillCount < w.KillRequirement);
+            if (Level < 0)
+                Level = Waves.Count - 1;
+
+            KillCountChanged?.Invoke(Level);
         }
 
         private void OnEntityDisposed(Entity entity)
@@ -110,9 +137,26 @@ namespace LudumDare40.Vrax
             Spawned.Remove(entity);
         }
 
+        public void Dispose()
+        {
+            if (Spawned != null)
+            {
+                foreach (var spawn in Spawned)
+                {
+                    spawn.Disposed -= OnEntityDisposed;
+                    spawn.Destroyed -= OnEntityDisposed;
+
+                    spawn.Dispose();
+                }
+                Spawned.Clear();
+            }
+            Spawned = null;
+        }
+
         private class Wave
         {
-            public int Count { get; set; }
+            public int KillRequirement { get; set; }
+            public int SpawnCount { get; set; }
             public WeightedTable<SpawnChance> Table { get; set; }
         }
 
