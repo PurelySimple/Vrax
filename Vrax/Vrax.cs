@@ -59,6 +59,8 @@ namespace LudumDare40.Vrax
             DefaultFont = AssetCache.LoadFont("DefaultFont.fnt");
             MainAtlas = AssetCache.LoadAtlas("Atlas.json");
 
+            Audio.PlayMusic(AssetCache.LoadMusic("song.mp3"));
+
             // Setup slices
             var beamTexture = MainAtlas.GetFrame("beam.png");
             beamTexture.Slice = new SliceSettings()
