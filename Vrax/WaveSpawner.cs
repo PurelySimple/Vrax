@@ -28,69 +28,94 @@ namespace LudumDare40.Vrax
             {
                 new Wave()
                 {
-                    KillRequirement = 3,
+                    KillRequirement = 5,
                     SpawnCount = 1,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateDartEnemy)
+                        new SpawnChance(1, factory.CreateUFOEnemy)
                     })
                 },
                 new Wave()
                 {
-                    KillRequirement = 5,
+                    KillRequirement = 20,
                     SpawnCount = 2,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(3, factory.CreateShuttleEnemy),
-                        new SpawnChance(1, factory.CreateRocketLauncherEnemy)
-                    })
-                },
-                new Wave()
-                {
-                    KillRequirement = 15,
-                    SpawnCount = 3,
-                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
-                    {
-                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(5, factory.CreateUFOEnemy),
                         new SpawnChance(2, factory.CreateRocketLauncherEnemy)
                     })
                 },
                 new Wave()
                 {
+                    KillRequirement = 25,
+                    SpawnCount = 2,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(1, factory.CreateDartEnemy),
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 30,
+                    SpawnCount = 3,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(1, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy),
+                    })
+                },
+                new Wave()
+                {
                     KillRequirement = 40,
-                    SpawnCount = 4,
+                    SpawnCount = 3,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(2, factory.CreateShuttleEnemy),
-                        new SpawnChance(1, factory.CreateRocketLauncherEnemy),
                         new SpawnChance(2, factory.CreateUFOEnemy),
                     })
                 },
                 new Wave()
                 {
                     KillRequirement = 50,
-                    SpawnCount = 5,
+                    SpawnCount = 4,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateRocketLauncherEnemy),
-                        new SpawnChance(4, factory.CreateUFOEnemy),
+                        new SpawnChance(1, factory.CreateDartEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
                     })
                 },
                 new Wave()
                 {
-                    KillRequirement = 60,
-                    SpawnCount = 6,
+                    KillRequirement = 55,
+                    SpawnCount = 4,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
-                        new SpawnChance(2, factory.CreateUFOEnemy),
                         new SpawnChance(2, factory.CreateBeamEnemy),
                     })
                 },
                 new Wave()
                 {
+                    KillRequirement = 60,
+                    SpawnCount = 4,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(1, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 65,
+                    SpawnCount = 5,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(1, factory.CreateShuttleEnemy),
+                    })
+                },
+                new Wave()
+                {
                     KillRequirement = 70,
-                    SpawnCount = 10,
+                    SpawnCount = 5,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
                         new SpawnChance(2, factory.CreateShuttleEnemy),
@@ -98,7 +123,72 @@ namespace LudumDare40.Vrax
                         new SpawnChance(2, factory.CreateUFOEnemy),
                         new SpawnChance(1, factory.CreateBeamEnemy),
                     })
-                }
+                },
+                new Wave()
+                {
+                    KillRequirement = 80,
+                    SpawnCount = 6,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy)
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 90,
+                    SpawnCount = 8,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy)
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 100,
+                    SpawnCount = 10,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy)
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 110,
+                    SpawnCount = 12,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy)
+                    })
+                },
+                new Wave()
+                {
+                    KillRequirement = 150,
+                    SpawnCount = 14,
+                    Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
+                    {
+                        new SpawnChance(2, factory.CreateShuttleEnemy),
+                        new SpawnChance(2, factory.CreateRocketLauncherEnemy),
+                        new SpawnChance(2, factory.CreateUFOEnemy),
+                        new SpawnChance(2, factory.CreateBeamEnemy),
+                        new SpawnChance(2, factory.CreateDartEnemy)
+                    })
+                },
             };
         }
 

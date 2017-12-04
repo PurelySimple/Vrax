@@ -264,6 +264,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">bullet.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9Paddings</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">burner0.png</key>
             <key type="filename">burner1.png</key>
             <key type="filename">burner2.png</key>
@@ -374,6 +387,19 @@
                 <rect>4,4,8,8</rect>
                 <key>scale9Paddings</key>
                 <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">hovercraft.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,5,22,10</rect>
+                <key>scale9Paddings</key>
+                <rect>11,5,22,10</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

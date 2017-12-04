@@ -12,6 +12,7 @@ namespace LudumDare40.Vrax.Components
         public Distance FireOffset { get; set; }
         public Distance ProjectileDirection { get; set; }
         public bool PlayerTracking { get; set; }
+        public bool PlayerAimed { get; set; }
 
         public bool TryFire { get; set; }
 
@@ -53,6 +54,10 @@ namespace LudumDare40.Vrax.Components
                 projectile.FiredFrom = Owner;
                 FireTimer = Config.ShootSpeed;
 
+                if (PlayerAimed)
+                {
+                    projectile.Direction = (Vrax.Game.Input.Pointer - projectileEntity.Position).UnitVector;
+                }
                 if (PlayerTracking)
                 {
                     projectile.Direction = (Vrax.World.PlayerEntity.Position - Owner.Position).UnitVector;

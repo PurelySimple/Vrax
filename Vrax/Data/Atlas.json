@@ -2,7 +2,7 @@
 
 {
 	"filename": "beam.png",
-	"frame": {"x":679,"y":154,"w":10,"h":9},
+	"frame": {"x":111,"y":230,"w":10,"h":9},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":9},
@@ -20,7 +20,7 @@
 },
 {
 	"filename": "bomb.png",
-	"frame": {"x":631,"y":155,"w":43,"h":9},
+	"frame": {"x":64,"y":230,"w":43,"h":9},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":43,"h":9},
@@ -46,8 +46,17 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
+	"filename": "bullet.png",
+	"frame": {"x":576,"y":155,"w":6,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":6},
+	"sourceSize": {"w":6,"h":6},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
 	"filename": "burner0.png",
-	"frame": {"x":54,"y":230,"w":16,"h":6},
+	"frame": {"x":176,"y":230,"w":16,"h":6},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":6},
@@ -56,7 +65,7 @@
 },
 {
 	"filename": "burner1.png",
-	"frame": {"x":112,"y":230,"w":14,"h":6},
+	"frame": {"x":234,"y":230,"w":14,"h":6},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":2,"y":0,"w":14,"h":6},
@@ -65,7 +74,7 @@
 },
 {
 	"filename": "burner2.png",
-	"frame": {"x":74,"y":230,"w":15,"h":6},
+	"frame": {"x":196,"y":230,"w":15,"h":6},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":0,"w":15,"h":6},
@@ -74,7 +83,7 @@
 },
 {
 	"filename": "chevron.png",
-	"frame": {"x":602,"y":206,"w":49,"h":31},
+	"frame": {"x":626,"y":155,"w":49,"h":31},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":31},
@@ -83,7 +92,7 @@
 },
 {
 	"filename": "dart.png",
-	"frame": {"x":576,"y":155,"w":51,"h":10},
+	"frame": {"x":3,"y":230,"w":51,"h":10},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":10},
@@ -92,7 +101,7 @@
 },
 {
 	"filename": "enemy_shot.png",
-	"frame": {"x":148,"y":230,"w":10,"h":5},
+	"frame": {"x":586,"y":155,"w":10,"h":5},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":5},
@@ -101,7 +110,7 @@
 },
 {
 	"filename": "explosionlarge_0.png",
-	"frame": {"x":663,"y":196,"w":17,"h":15},
+	"frame": {"x":676,"y":190,"w":17,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":11,"y":11,"w":17,"h":15},
@@ -110,7 +119,7 @@
 },
 {
 	"filename": "explosionlarge_1.png",
-	"frame": {"x":413,"y":213,"w":30,"h":25},
+	"frame": {"x":421,"y":213,"w":30,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":6,"w":30,"h":25},
@@ -155,7 +164,7 @@
 },
 {
 	"filename": "fighter0.png",
-	"frame": {"x":298,"y":216,"w":50,"h":20},
+	"frame": {"x":326,"y":216,"w":50,"h":20},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":20},
@@ -164,7 +173,7 @@
 },
 {
 	"filename": "fighter1.png",
-	"frame": {"x":546,"y":210,"w":52,"h":28},
+	"frame": {"x":513,"y":212,"w":52,"h":28},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":52,"h":28},
@@ -181,8 +190,17 @@
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
+	"filename": "hovercraft.png",
+	"frame": {"x":628,"y":190,"w":44,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":19},
+	"sourceSize": {"w":44,"h":19},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
 	"filename": "jet0.png",
-	"frame": {"x":171,"y":230,"w":11,"h":3},
+	"frame": {"x":679,"y":170,"w":11,"h":3},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":3},
@@ -191,7 +209,7 @@
 },
 {
 	"filename": "jet1.png",
-	"frame": {"x":186,"y":230,"w":10,"h":3},
+	"frame": {"x":609,"y":155,"w":10,"h":3},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":3},
@@ -200,7 +218,7 @@
 },
 {
 	"filename": "jet2.png",
-	"frame": {"x":200,"y":230,"w":6,"h":3},
+	"frame": {"x":609,"y":162,"w":6,"h":3},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":3},
@@ -209,7 +227,7 @@
 },
 {
 	"filename": "jetlong0.png",
-	"frame": {"x":31,"y":230,"w":19,"h":6},
+	"frame": {"x":153,"y":230,"w":19,"h":6},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":19,"h":6},
@@ -218,7 +236,7 @@
 },
 {
 	"filename": "jetlong1.png",
-	"frame": {"x":130,"y":230,"w":14,"h":6},
+	"frame": {"x":679,"y":154,"w":14,"h":6},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":6},
@@ -227,7 +245,7 @@
 },
 {
 	"filename": "jetlong2.png",
-	"frame": {"x":93,"y":230,"w":15,"h":6},
+	"frame": {"x":215,"y":230,"w":15,"h":6},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":6},
@@ -236,7 +254,7 @@
 },
 {
 	"filename": "laser.png",
-	"frame": {"x":217,"y":230,"w":12,"h":2},
+	"frame": {"x":679,"y":164,"w":12,"h":2},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":2},
@@ -245,7 +263,7 @@
 },
 {
 	"filename": "laservertical.png",
-	"frame": {"x":691,"y":167,"w":2,"h":10},
+	"frame": {"x":58,"y":230,"w":2,"h":10},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":10},
@@ -254,7 +272,7 @@
 },
 {
 	"filename": "meter.png",
-	"frame": {"x":626,"y":169,"w":5,"h":30},
+	"frame": {"x":569,"y":210,"w":5,"h":30},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":5,"h":30},
@@ -299,7 +317,7 @@
 },
 {
 	"filename": "orb.png",
-	"frame": {"x":19,"y":230,"w":8,"h":8},
+	"frame": {"x":141,"y":230,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -308,7 +326,7 @@
 },
 {
 	"filename": "rocket.png",
-	"frame": {"x":3,"y":230,"w":12,"h":8},
+	"frame": {"x":125,"y":230,"w":12,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":8},
@@ -317,7 +335,7 @@
 },
 {
 	"filename": "rocketlauncher.png",
-	"frame": {"x":505,"y":212,"w":37,"h":26},
+	"frame": {"x":380,"y":213,"w":37,"h":26},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":37,"h":26},
@@ -326,7 +344,7 @@
 },
 {
 	"filename": "shieldicon.png",
-	"frame": {"x":252,"y":216,"w":42,"h":21},
+	"frame": {"x":280,"y":216,"w":42,"h":21},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":42,"h":21},
@@ -335,7 +353,7 @@
 },
 {
 	"filename": "shuttle.png",
-	"frame": {"x":374,"y":216,"w":35,"h":19},
+	"frame": {"x":628,"y":213,"w":35,"h":19},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":35,"h":19},
@@ -344,7 +362,7 @@
 },
 {
 	"filename": "splosion_0.png",
-	"frame": {"x":655,"y":215,"w":17,"h":15},
+	"frame": {"x":676,"y":209,"w":17,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":6,"w":17,"h":15},
@@ -353,7 +371,7 @@
 },
 {
 	"filename": "splosion_1.png",
-	"frame": {"x":663,"y":168,"w":24,"h":24},
+	"frame": {"x":252,"y":216,"w":24,"h":24},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":1,"w":24,"h":24},
@@ -362,7 +380,7 @@
 },
 {
 	"filename": "splosion_2.png",
-	"frame": {"x":447,"y":213,"w":25,"h":25},
+	"frame": {"x":455,"y":213,"w":25,"h":25},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
@@ -371,7 +389,7 @@
 },
 {
 	"filename": "splosion_3.png",
-	"frame": {"x":476,"y":213,"w":25,"h":25},
+	"frame": {"x":484,"y":213,"w":25,"h":25},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
@@ -380,7 +398,7 @@
 },
 {
 	"filename": "splosion_4.png",
-	"frame": {"x":635,"y":168,"w":24,"h":25},
+	"frame": {"x":578,"y":206,"w":24,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":25},
@@ -389,7 +407,7 @@
 },
 {
 	"filename": "star0.png",
-	"frame": {"x":162,"y":230,"w":5,"h":5},
+	"frame": {"x":600,"y":155,"w":5,"h":5},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":5,"h":5},
@@ -398,7 +416,7 @@
 },
 {
 	"filename": "star1.png",
-	"frame": {"x":217,"y":236,"w":2,"h":2},
+	"frame": {"x":578,"y":235,"w":2,"h":2},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":2},
@@ -407,7 +425,7 @@
 },
 {
 	"filename": "star2.png",
-	"frame": {"x":210,"y":230,"w":3,"h":3},
+	"frame": {"x":619,"y":162,"w":3,"h":3},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":3},
@@ -416,7 +434,7 @@
 },
 {
 	"filename": "star3.png",
-	"frame": {"x":178,"y":237,"w":2,"h":1},
+	"frame": {"x":593,"y":164,"w":2,"h":1},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":1},
@@ -425,7 +443,7 @@
 },
 {
 	"filename": "star4.png",
-	"frame": {"x":171,"y":237,"w":3,"h":1},
+	"frame": {"x":586,"y":164,"w":3,"h":1},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":1},
@@ -443,7 +461,7 @@
 },
 {
 	"filename": "ufo.png",
-	"frame": {"x":352,"y":216,"w":18,"h":20},
+	"frame": {"x":606,"y":206,"w":18,"h":20},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":20},
@@ -455,8 +473,8 @@
 	"version": "1.0",
 	"image": "Atlas.png",
 	"format": "RGBA8888",
-	"size": {"w":697,"h":241},
+	"size": {"w":697,"h":243},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f56ad0d9655e23c6ff2cef808fc1f187:d50d68c0262018ffd38417ac3f62116e:25f17efe6f9b88fe925cae06aa785e18$"
+	"smartupdate": "$TexturePacker:SmartUpdate:0127eb5c20f80afaf2bce25e01be61dd:b88d0a66c26b8a55123731e6de2d4810:25f17efe6f9b88fe925cae06aa785e18$"
 }
 }

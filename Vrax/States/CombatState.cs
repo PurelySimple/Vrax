@@ -64,7 +64,8 @@ namespace LudumDare40.Vrax.States
             {
                 Factory.CreateStartingPlayer,
                 Factory.CreateRank1Fighter,
-                Factory.CreateBomber
+                Factory.CreateBomber,
+                Factory.CreateHovercraft,
             };
 
             CreateUI();

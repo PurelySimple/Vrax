@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>LudumDare40.Vrax</RootNamespace>
     <AssemblyName>Vrax</AssemblyName>
+    <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>

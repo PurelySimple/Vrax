@@ -15,6 +15,7 @@ namespace LudumDare40.Vrax
 
         private AtlasFrame LaserAsset { get; set; }
         private AtlasFrame LaserVerticalAsset { get; set; }
+        private AtlasFrame BulletAsset { get; set; }
         private AtlasFrame EnemyShot { get; set; }
 
         private Sound LaserSound { get; set; }
@@ -32,6 +33,7 @@ namespace LudumDare40.Vrax
 
             LaserAsset = MainAtlas.GetFrame("laser.png");
             LaserVerticalAsset = MainAtlas.GetFrame("laservertical.png");
+            BulletAsset = MainAtlas.GetFrame("bullet.png");
             EnemyShot = MainAtlas.GetFrame("enemy_shot.png");
 
             LaserSound = assetCache.LoadSound("laserfire.wav");
@@ -196,6 +198,37 @@ namespace LudumDare40.Vrax
             return result;
         }
 
+        public Entity CreateHovercraft()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 8, 44, 11),
+                Team = Team.Player
+            };
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("hovercraft.png")));
+            result.AddComponent(new MovementComponent(250d));
+            result.AddComponent(new PlayerControls());
+            result.AddComponent(new InvulnerableDamageHandler(1.5d));
+
+            // Starting weapon
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                ProjectileCreator = CreateRoundBullet,
+                ShootSpeed = 0.1,
+                Damage = 1,
+            })
+            {
+                FireOffset = new Distance(14, 1),
+                ProjectileDirection = new Distance(1f, 0),
+                PlayerAimed = true
+            });
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
         public Entity CreateLaser()
         {
             var result = new Entity()
@@ -209,6 +242,24 @@ namespace LudumDare40.Vrax
             result.AddComponent(new ProjectileComponent()
             {
                 Speed = 500
+            });
+
+            return result;
+        }
+
+        public Entity CreateRoundBullet()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 6, 6),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(BulletAsset));
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 400
             });
 
             return result;
