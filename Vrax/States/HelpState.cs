@@ -48,6 +48,7 @@ namespace LudumDare40.Vrax.States
             CreateControlsPage();
             CreateUIHelpPage();
             CreateTransformPage();
+            CreateAboutPage();
 
             Display.Add(Pages[0]);
         }
@@ -234,6 +235,20 @@ namespace LudumDare40.Vrax.States
                 Parent = page,
                 Position = new Point(x, y),
                 Anchor = new Distance(0.5f, 0)
+            };
+        }
+
+        private void CreateAboutPage()
+        {
+            var page = new DisplayContainer();
+            Pages.Add(page);
+
+            var tf = new Textfield(HelpFont, "This game was made completely in 48 hours by Mark Troyer on Dec 1-3, 2017 for the Ludum Dare 40 Compo. I had fun making it and I hope you enjoy playing it!")
+            {
+                Parent = page,
+                Position = Screen.Half,
+                Anchor = Distance.Center,
+                MaxWidth = (int)(Screen.Width * 0.8f)
             };
         }
 

@@ -272,6 +272,42 @@ namespace LudumDare40.Vrax
             return result;
         }
 
+        public Entity CreateUpwardEnemyShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 5, 10),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(EnemyShot) { Rotation = -90 });
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 300
+            });
+
+            return result;
+        }
+
+        public Entity CreateDownardEnemyShot()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 5, 10),
+                IgnoreCollision = true
+            };
+            result.AddComponent(new CollisionDamageComponent(0) { DestroyOnCollide = true });
+            result.AddComponent(new RenderComponent(EnemyShot) { Rotation = 90 });
+            result.AddComponent(new ProjectileComponent()
+            {
+                Speed = 300
+            });
+
+            return result;
+        }
+
         public Entity CreateOrbShot()
         {
             var result = new Entity()
@@ -455,6 +491,54 @@ namespace LudumDare40.Vrax
             {
                 ProjectileDirection = new Distance(-1, 0),
                 FireOffset = new Distance(2, 12),
+                TryFire = true
+            });
+
+            result.Destroyed += SpawnExplosionOnDeath;
+
+            return result;
+        }
+
+        public Entity CreateDartEnemy()
+        {
+            var result = new Entity()
+            {
+                Health = 1,
+                Rectangle = new Rect(0, 0, 37, 26),
+                Team = Team.Enemy
+            };
+
+            var weapon = new WeaponConfig()
+            {
+                Damage = 1,
+                ProjectileCreator = CreateUpwardEnemyShot,
+                ShootSpeed = 0.8
+            };
+
+            result.AddComponent(new RenderComponent(MainAtlas.GetFrame("dart.png")));
+            result.AddComponent(new MovementComponent(300)
+            {
+                MoveLeft = true
+            });
+            result.AddComponent(new CollisionDamageComponent(1) { DestroyOnCollide = true });
+            // Top gun
+            result.AddComponent(new WeaponComponent(weapon)
+            {
+                ProjectileDirection = new Distance(0, -1),
+                FireOffset = new Distance(21, 2),
+                TryFire = true
+            });
+
+            // Bottom gun
+            result.AddComponent(new WeaponComponent(new WeaponConfig()
+            {
+                Damage = 1,
+                ProjectileCreator = CreateDownardEnemyShot,
+                ShootSpeed = 0.8,
+            })
+            {
+                ProjectileDirection = new Distance(0, 1),
+                FireOffset = new Distance(21, 10),
                 TryFire = true
             });
 

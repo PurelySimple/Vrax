@@ -32,7 +32,7 @@ namespace LudumDare40.Vrax
                     SpawnCount = 1,
                     Table = new WeightedTable<SpawnChance>(e => e.Weight, new[]
                     {
-                        new SpawnChance(1, factory.CreateUFOEnemy)
+                        new SpawnChance(1, factory.CreateDartEnemy)
                     })
                 },
                 new Wave()

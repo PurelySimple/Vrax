@@ -19,6 +19,7 @@ namespace LudumDare40.Vrax
 
         public static IGameAccess Game { get; private set; }
         public static IWorldContainer World { get; private set; }
+        public static bool EnableDebug { get; set; }
 
         static void Main(string[] args)
         {
@@ -107,6 +108,9 @@ namespace LudumDare40.Vrax
             var action = Input.Register(Controls.DisableMusic, Keycode.M);
             action.OnReleased += OnDisableMusic;
 
+            action = Input.Register(Controls.Debug, Keycode.F1);
+            action.OnReleased += () => EnableDebug = !EnableDebug;
+
             State = new MenuState(Factory);
         }
 
@@ -148,7 +152,8 @@ namespace LudumDare40.Vrax
             State?.Draw(g);
 
             // DEBUG
-            g.DrawText(DefaultFont, $"FPS: {FPS}", new Point(0, Screen.Height - DefaultFont.TextHeight));
+            if (EnableDebug)
+                g.DrawText(DefaultFont, $"FPS: {FPS}", new Point(0, Screen.Height - DefaultFont.TextHeight));
         }
     }
 
@@ -162,6 +167,8 @@ namespace LudumDare40.Vrax
         Fire,
         DisableMusic,
         TransformSmaller,
-        TransformBigger
+        TransformBigger,
+
+        Debug
     }
 }
