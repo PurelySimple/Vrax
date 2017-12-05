@@ -31,7 +31,7 @@ namespace LudumDare40.Vrax
         protected override void Init(GameSettings settings)
         {
             settings.Graphics.SetNativeSize(960, 540, ScaleMode.FitWidth);
-            settings.Graphics.SetScreenSize(1920, 1080, false);
+            settings.Graphics.SetScreenSize(1920, 1080, true);
             settings.Graphics.VSync = true;
 
             settings.UpdateHertz = 60;
